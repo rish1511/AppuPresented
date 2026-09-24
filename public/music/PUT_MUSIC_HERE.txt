@@ -1,0 +1,6 @@
+Put your song here and name it exactly: birthday.mp3
+
+Full path should be: public/music/birthday.mp3
+
+Until a real file exists, the music button will simply appear disabled/dim —
+the site works fine without it. Delete this text file once you've added the song.
