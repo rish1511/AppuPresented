@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import OpeningGate from './components/sections/OpeningGate';
 import Hero from './components/sections/Hero';
@@ -12,6 +12,7 @@ import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
   const [hasEntered, setHasEntered] = useState(false);
+  const musicPlayerRef = useRef(null);
 
   return (
     <div className="relative min-h-screen bg-noir">
@@ -31,9 +32,9 @@ export default function App() {
           <Message />
           <Memory />
           <Wishes />
-          <Surprise />
+          <Surprise onOpen={() => musicPlayerRef.current?.play()} />
           <Finale />
-          <MusicPlayer />
+          <MusicPlayer ref={musicPlayerRef} />
         </motion.main>
       )}
     </div>

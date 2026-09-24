@@ -42,7 +42,7 @@ function Burst({ show }) {
   );
 }
 
-export default function Surprise() {
+export default function Surprise({ onOpen }) {
   const { surprise, boyName, girlName } = birthdayData;
   const [isOpen, setIsOpen] = useState(false);
   const [showBurst, setShowBurst] = useState(false);
@@ -50,6 +50,7 @@ export default function Surprise() {
   const handleOpen = () => {
     setIsOpen(true);
     setShowBurst(true);
+    onOpen?.();
     setTimeout(() => setShowBurst(false), 1300);
   };
 

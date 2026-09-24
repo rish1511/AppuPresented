@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Music, Pause } from 'lucide-react';
 import { birthdayData } from '../data/birthdayData';
 
 // Music never autoplays. This is the only control for it — a small,
 // unobtrusive floating button that stays reachable while scrolling.
-export default function MusicPlayer() {
+const MusicPlayer = forwardRef(function MusicPlayer(_, ref) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -17,6 +17,20 @@ export default function MusicPlayer() {
     audio.volume = 0.55;
   }, []);
 
+  const play = async () => {
+    const audio = audioRef.current;
+    if (!audio || hasError) return;
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+    } catch {
+      setHasError(true);
+    }
+  };
+
+  useImperativeHandle(ref, () => ({ play }), [hasError]);
+
   const toggle = async () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -25,8 +39,7 @@ export default function MusicPlayer() {
         audio.pause();
         setIsPlaying(false);
       } else {
-        await audio.play();
-        setIsPlaying(true);
+        await play();
       }
     } catch {
       setHasError(true);
@@ -35,7 +48,7 @@ export default function MusicPlayer() {
 
   return (
     <>
-      <audio ref={audioRef} src={birthdayData.music} preload="none" onError={() => setHasError(true)} />
+      <audio ref={audioRef} src={birthdayData.music} preload="auto" onError={() => setHasError(true)} />
       <motion.button
         type="button"
         onClick={toggle}
@@ -59,4 +72,6 @@ export default function MusicPlayer() {
       </motion.button>
     </>
   );
-}
+});
+
+export default MusicPlayer;
